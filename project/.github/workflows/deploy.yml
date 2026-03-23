@@ -1,0 +1,24 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        env:
+          PEM_FILE: ${{ secrets.PEM_FILE }}
+        run: |
+          echo "$PEM_FILE" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@54.167.13.82 "
+            cd wheretowear &&
+            sudo git pull &&
+            sudo docker compose up --build -d
+          "
+          rm -f key.pem

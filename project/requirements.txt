@@ -1,0 +1,20 @@
+# Where-to-wear backend — direct dependencies only (run from backend/: uvicorn main:app)
+# Install: pip install -r requirements.txt
+# HTTP API
+fastapi==0.135.1
+uvicorn[standard]==0.41.0
+# Background jobs (snapshot schedule)
+APScheduler==3.11.2
+
+# HTTP client + environment
+requests==2.32.5
+python-dotenv==1.2.2
+# YouTube frame capture (services/capture.py)
+opencv-python-headless==4.13.0.92
+yt-dlp
+# Clothing analysis (services/image_analysys.py)
+openai
+# People detection — YOLO (services/people_detection.py); pulls torch, numpy, pillow, etc.
+ultralytics==8.4.21
+
+

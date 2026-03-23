@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WhereToWear</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 30px 16px;
+}
+
+.container {
+    background: rgba(255,255,255,0.08);
+    padding: 30px;
+    border-radius: 20px;
+    width: 480px;
+    max-width: 100%;
+    backdrop-filter: blur(14px);
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+h2 { margin: 0 0 20px; font-size: 1.5em; }
+
+select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.9);
+    color: #222;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.error {
+    color: #ff6b6b;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.section {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.section h3 {
+    margin: 0 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    font-size: 1em;
+}
+
+.last-update-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.95);
+}
+
+/* Horizontal weather widget */
+.weather-widget {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.weather-chip {
+    flex: 1 1 120px;
+    min-width: 100px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    text-align: center;
+}
+
+.weather-chip-label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 6px;
+}
+
+.weather-chip-value {
+    font-size: 1.15em;
+    font-weight: 600;
+    color: rgba(255,255,255,0.95);
+}
+
+/* Outfit badge groups */
+.outfit-subheading {
+    margin: 16px 0 8px;
+    font-size: 0.82em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: rgba(255,255,255,0.65);
+}
+
+.outfit-subheading:first-of-type {
+    margin-top: 4px;
+}
+
+.badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.badge--high {
+    background: rgba(105, 240, 174, 0.18);
+    border-color: rgba(105, 240, 174, 0.45);
+    color: #b9f6ca;
+}
+
+.badge--medium {
+    background: rgba(255, 213, 64, 0.15);
+    border-color: rgba(255, 213, 64, 0.4);
+    color: #ffe082;
+}
+
+.badge--low {
+    background: rgba(255, 138, 101, 0.2);
+    border-color: rgba(255, 138, 101, 0.45);
+    color: #ffccbc;
+}
+
+.badge--none {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.55);
+    font-size: 0.92em;
+}
+
+c.loading {
+    color: rgba(255,255,255,0.5);
+    padding: 20px 0;
+}
+
+iframe {
+    margin-top: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.date-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    text-align: left;
+}
+
+.date-toggle {
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
+    transition: transform 0.15s;
+}
+
+.date-toggle:hover {
+    transform: scale(1.2);
+}
+
+.history-dropdown {
+    margin-top: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.history-item {
+    padding: 10px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.15s;
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.history-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.history-item.active {
+    background: rgba(0,198,255,0.2);
+}
+
+.history-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🌏 WhereToWear</h2>
+
+    <select id="citySelect">
+        <option value="" disabled selected>Select a city</option>
+        <option value="Tokyo">Tokyo</option>
+        <option value="New York">New York</option>
+        <option value="London">London</option>
+        <option value="Koh Samui">Koh Samui</option>
+    </select>
+
+    <button onclick="fetchSnapshot()">Get Outfit Recommendation</button>
+
+    <div id="error" class="error"></div>
+
+    <div id="result"></div>
+</div>
+
+<script>
+
+const LABEL_MAP = {
+    tshirts_short_sleeve: "T-shirt (Short Sleeve)",
+    tshirts_long_sleeve: "T-shirt (Long Sleeve)",
+    tank_tops: "Tank Tops",
+    hoodies: "Hoodies",
+    light_jackets: "Light Jackets",
+    heavy_coats: "Heavy Coats",
+    pants_long: "Long Pants",
+    shorts: "Shorts",
+    skirts_short: "Short Skirts",
+    skirts_long: "Long Skirts",
+    dress_short: "Short Dresses",
+    dress_long: "Long Dresses",
+    sneakers: "Sneakers",
+    sandals: "Sandals",
+    flip_flops: "Flip Flops",
+    boots: "Boots",
+    closed_shoes: "Closed Shoes",
+    summer_hats: "Summer Hats",
+    winter_hats: "Winter Hats",
+    scarves: "Scarves",
+    gloves: "Gloves",
+    thermal_layers: "Thermal Layers",
+};
+
+function escapeHtml(s) {
+    if (s == null) return "";
+    return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+/** Parse snapshot strings like 2026-03-22_17-04 or 2026-03-22_17-04-15 into local Date */
+function parseSnapshotDate(dateStr) {
+    if (!dateStr || typeof dateStr !== "string") return null;
+    const m = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})[_T](\d{2})-(\d{2})(?:-(\d{2}))?/);
+    if (!m) return null;
+    const y = +m[1], mo = +m[2], d = +m[3], h = +m[4], mi = +m[5], s = m[6] != null ? +m[6] : 0;
+    const dt = new Date(y, mo - 1, d, h, mi, s);
+    return isNaN(dt.getTime()) ? null : dt;
+}
+
+function formatLastUpdateLabel(dateStr) {
+    const dt = parseSnapshotDate(dateStr);
+    if (!dt) {
+        return "Last update: " + String(dateStr) + " (Local Time)";
+    }
+    const today = new Date();
+    const isToday = dt.toDateString() === today.toDateString();
+    const hm = dt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    if (isToday) {
+        return "Last update: Today, " + hm + " (Local Time)";
+    }
+    const readable = dt.toLocaleString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+    return "Last update: " + readable + " (Local Time)";
+}
+
+/** Plain text for history list rows; escape when embedding in HTML */
+function formatHistoryListLabel(dateStr) {
+    const dt = parseSnapshotDate(dateStr);
+    if (!dt) return String(dateStr);
+    const today = new Date();
+    const isToday = dt.toDateString() === today.toDateString();
+    const hm = dt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    if (isToday) {
+        return "Today, " + hm + " (Local Time)";
+    }
+    return (
+        dt.toLocaleString(undefined, {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }) 
+    );
+}
+
+function renderWeatherWidget(weather) {
+    const w = weather || {};
+    const chips = [];
+    if (w.temp_c != null) {
+        chips.push({
+            icon: "🌡",
+            label: "Temperature",
+            value: Math.round(w.temp_c) + "°C",
+        });
+    }
+    if (w.feels_like_c != null) {
+        chips.push({
+            icon: "🤔",
+            label: "Feels like",
+            value: Math.round(w.feels_like_c) + "°C",
+        });
+    }
+    if (w.description != null && String(w.description).trim() !== "") {
+        chips.push({
+            icon: "☁️",
+            label: "Sky",
+            value: escapeHtml(String(w.description)),
+        });
+    }
+    if (!chips.length) {
+        return '<div class="weather-widget"><div class="weather-chip"><span class="weather-chip-value">No weather data</span></div></div>';
+    }
+    return (
+        '<div class="weather-widget">' +
+        chips
+            .map(
+                (c) => `
+        <div class="weather-chip">
+            <span class="weather-chip-label">${c.icon} ${escapeHtml(c.label)}</span>
+            <span class="weather-chip-value">${c.value}</span>
+        </div>`
+            )
+            .join("") +
+        "</div>"
+    );
+}
+
+function renderBadgeGroup(title, entries, modifierClass) {
+    if (!entries.length) return "";
+    const sorted = [...entries].sort((a, b) =>
+        (LABEL_MAP[a[0]] || a[0]).localeCompare(LABEL_MAP[b[0]] || b[0])
+    );
+    const badges = sorted
+        .map(([key]) => `<span class="badge ${modifierClass}">${escapeHtml(LABEL_MAP[key] || key)}</span>`)
+        .join("");
+    return `<h4 class="outfit-subheading">${escapeHtml(title)}</h4><div class="badge-row">${badges}</div>`;
+}
+
+function renderClothingBadges(clothing) {
+    const high = [],
+        medium = [],
+        low = [],
+        none = [],
+        other = [];
+    for (const [key, level] of Object.entries(clothing || {})) {
+        if (level === "high") high.push([key, level]);
+        else if (level === "medium") medium.push([key, level]);
+        else if (level === "low") low.push([key, level]);
+        else if (level === "none") none.push([key, level]);
+        else other.push([key, level]);
+    }
+    return [
+        renderBadgeGroup("Highly Recommended", high, "badge--high"),
+        renderBadgeGroup("Also common", medium, "badge--medium"),
+        renderBadgeGroup("Less Common", low, "badge--low"),
+        renderBadgeGroup("Very rare / almost no one wears", none, "badge--none"),
+        renderBadgeGroup("Other", other, "badge--medium"),
+    ].join("");
+}
+
+function getYoutubeEmbed(url) {
+    if (!url) return "";
+    const videoId = url.split("v=")[1];
+    if (!videoId) return "";
+    return `
+        <iframe width="100%" height="220"
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1"
+            frameborder="0" allow="autoplay" allowfullscreen>
+        </iframe>
+    `;
+}
+
+let currentCity = "";
+let currentWeather = {};
+let currentSourceUrl = "";
+let historyOpen = false;
+let lastHistoryItems = [];
+
+function renderResult(clothing, createdAt, weather, sourceUrl, historyHtml) {
+    return `
+        <div class="section">
+            <div class="date-row">
+                <span class="date-toggle" onclick="toggleHistory()" title="Browse past snapshots">📅</span>
+                <span class="last-update-text">${escapeHtml(formatLastUpdateLabel(createdAt))}</span>
+            </div>
+            <div class="history-hint">Tap 📅 to browse this week's snapshots</div>
+            <div id="history-dropdown" class="history-dropdown" style="display:${historyOpen ? 'block' : 'none'}">
+                ${historyHtml || '<div class="history-item" style="color:rgba(255,255,255,0.4)">Loading...</div>'}
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🌤️ Weather</h3>
+            ${renderWeatherWidget(weather)}
+        </div>
+
+        <div class="section">
+            <h3>👕 Outfit</h3>
+            ${renderClothingBadges(clothing)}
+        </div>
+
+        ${getYoutubeEmbed(sourceUrl)}
+    `;
+}
+
+async function fetchSnapshot() {
+    const city = document.getElementById("citySelect").value;
+    if (!city) return;
+
+    currentCity = city;
+    historyOpen = false;
+    lastHistoryItems = [];
+
+    const resultDiv = document.getElementById("result");
+    const errorDiv = document.getElementById("error");
+
+    resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+    errorDiv.innerText = "";
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/snapshot/" + city);
+
+        if (!response.ok) {
+            errorDiv.innerText = "City not found";
+            resultDiv.innerHTML = "";
+            return;
+        }
+
+        const data = await response.json();
+        console.log("API response:", data);
+
+        currentWeather = data.weather || {};
+        currentSourceUrl = data.source_url;
+
+        resultDiv.innerHTML = renderResult(
+            data.snapshot.clothing,
+            data.snapshot.created_at,
+            currentWeather,
+            currentSourceUrl,
+            null
+        );
+
+    } catch (err) {
+        console.error(err);
+        errorDiv.innerText = "⚠️ Failed to fetch data";
+    }
+}
+
+async function toggleHistory() {
+    historyOpen = !historyOpen;
+    const dropdown = document.getElementById("history-dropdown");
+    if (!dropdown) return;
+
+    if (!historyOpen) {
+        dropdown.style.display = "none";
+        return;
+    }
+
+    dropdown.style.display = "block";
+    dropdown.innerHTML = '<div class="history-item" style="color:rgba(255,255,255,0.4)">Loading...</div>';
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/snapshot/" + currentCity + "/history");
+        if (!response.ok) {
+            dropdown.innerHTML = '<div class="history-item">No history available</div>';
+            return;
+        }
+        const items = await response.json();
+        if (items.length === 0) {
+            dropdown.innerHTML = '<div class="history-item">No snapshots this week</div>';
+            return;
+        }
+        lastHistoryItems = items;
+        dropdown.innerHTML = items
+            .map(
+                (item) =>
+                    `<div class="history-item" data-snapshot-id="${item.id}">${escapeHtml(formatHistoryListLabel(item.created_at))}</div>`
+            )
+            .join("");
+    } catch (err) {
+        dropdown.innerHTML = '<div class="history-item">Failed to load history</div>';
+    }
+}
+
+async function loadHistoryItem(snapshotId) {
+    const resultDiv = document.getElementById("result");
+
+    try {
+        let items = lastHistoryItems;
+        if (!items.length) {
+            const response = await fetch("http://127.0.0.1:8000/snapshot/" + currentCity + "/history");
+            if (!response.ok) return;
+            items = await response.json();
+            lastHistoryItems = items;
+        }
+        const item = items.find((i) => i.id === snapshotId);
+        if (!item || !item.clothing) return;
+
+        const historyHtml = items
+            .map(
+                (i) =>
+                    `<div class="history-item ${i.id === snapshotId ? "active" : ""}" data-snapshot-id="${i.id}">${escapeHtml(formatHistoryListLabel(i.created_at))}</div>`
+            )
+            .join("");
+
+        historyOpen = true;
+        resultDiv.innerHTML = renderResult(
+            item.clothing,
+            item.created_at,
+            currentWeather,
+            currentSourceUrl,
+            historyHtml
+        );
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+document.querySelector(".container").addEventListener("click", function (e) {
+    const row = e.target.closest(".history-item[data-snapshot-id]");
+    if (row) {
+        e.preventDefault();
+        loadHistoryItem(Number(row.dataset.snapshotId));
+    }
+});
+</script>
+
+</body>
+</html>
