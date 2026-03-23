@@ -16,22 +16,6 @@ Street-style signals from live city webcams: periodic snapshots from YouTube str
 
 - **Python 3.11+** (matches the Docker image)
 - **Docker** (optional, for containerized runs)
-- API keys as below (never commit them)
-
----
-
-## Environment variables
-
-Create a **`.env`** file in the **repository root** (the parent of `backend/`). Docker Compose loads it via `env_file: ../.env` when you run Compose from `backend/`.
-
-| Variable | Purpose |
-|----------|---------|
-| `OPENAI_API_KEY` | Clothing analysis (`services/image_analysys.py`) |
-| `OPEN_WEATHER_API_KEY` | Live weather (`services/weather.py`) |
-
-`.env` is listed in `.gitignore`. Do not push secrets.
-
----
 
 ## Run locally (virtualenv)
 
@@ -44,7 +28,6 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Set environment variables (or use a `.env` in the parent folder and rely on `python-dotenv` where loaded).
 
 Ensure SQLite tables and city rows exist (see `db/database.py`, `db/cities.py`; run their `__main__` blocks or your seed script if the DB is new), then:
 
