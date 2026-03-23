@@ -1,6 +1,6 @@
 FROM python:3.11
 
-# OpenCV (pulled in via ultralytics / capture) needs these at import time in slim Linux images
+# OpenCV (capture) needs these at import time in slim Linux images
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \

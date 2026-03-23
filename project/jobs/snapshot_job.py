@@ -4,7 +4,7 @@ from datetime import datetime,timezone
 from typing import Tuple
 from services.image_analysys import analyze_clothing_presence
 from services.capture import capture_youtube_frame as capture_frame
-from services.people_detection import has_enough_people
+# from services.people_detection import has_enough_people
 from services.weather import fetch_weather
 from db.save_snapshot import save_snapshot_metadata
 from db.models import parse_clothing_presence
@@ -42,8 +42,8 @@ def snapshot_job(city, url) -> None:
         capture_frame(url, image_path)
         logger.info("[%s] Frame captured -> %s", city, image_path)
 
-        if not has_enough_people(image_path):
-            logger.warning("[%s] Not enough people detected", city)
+        # if not has_enough_people(image_path):
+        #     logger.warning("[%s] Not enough people detected", city)
         #     os.remove(image_path)
         #     return
 

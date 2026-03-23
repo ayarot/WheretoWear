@@ -32,6 +32,6 @@ def setup_logging(level=logging.INFO, log_file="app.log"):
     #     root_logger.addHandler(file_handler)
 
     # Silence noisy libs
-    noisy_libs = ["ultralytics","apscheduler","openweather", "openai", "httpx", "urllib3"]
+    noisy_libs = ["apscheduler", "openweather", "openai", "httpx", "urllib3"]
     for lib in noisy_libs:
         logging.getLogger(lib).setLevel(logging.WARNING)

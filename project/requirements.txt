@@ -15,6 +15,6 @@ yt-dlp
 # Clothing analysis (services/image_analysys.py)
 openai
 # People detection — YOLO (services/people_detection.py); pulls torch, numpy, pillow, etc.
-ultralytics==8.4.21
+# ultralytics==8.4.21
 
 
