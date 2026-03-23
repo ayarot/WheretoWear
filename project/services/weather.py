@@ -8,11 +8,11 @@ load_dotenv()
 API_KEY = os.getenv("OPEN_WEATHER_API_KEY")
 
 CITY_COORDS = {
-    "tokyo":    {"lat": 35.6762, "lon": 139.6503},
-    "new york": {"lat": 40.7128, "lon": -74.0060},
-    "london":   {"lat": 51.5074, "lon": -0.1278},
-    "rome":     {"lat": 41.9028, "lon": 12.4964},
-    "koh samui": {"lat": 9.5120, "lon": 100.0137},
+    "tokyo":    {"lat": 35.67, "lon": 139.65},
+    "new york": {"lat": 40.71, "lon": -74.00},
+    "london":   {"lat": 51.50, "lon": -0.12},
+    "rome":     {"lat": 41.90, "lon": 12.49},
+    "koh samui": {"lat": 9.51, "lon": 100.01},
 }
 
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
@@ -75,7 +75,8 @@ if __name__ == "__main__":
     #     w = fetch_weather(city)
     #     print(f"{city}: {w}")
 
-    print(fetch_weather("new_york"))
-    print(fetch_weather("new_york"))
+    print(fetch_weather("new york"))
+    print(fetch_weather("new york"))
+    print(fetch_weather("tokyo"))
 
     

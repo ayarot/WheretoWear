@@ -15,6 +15,7 @@ def get_connection(db_path: str = "wheretowear.db") -> sqlite3.Connection:
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
+
 def create_db_and_tables() -> None:
 
     # Create database table if it does not exist
@@ -64,6 +65,8 @@ def create_db_and_tables() -> None:
     conn.commit()
     conn.close()
     logger.info("Database setup complete and connection closed.")
+
+
 
 
 if __name__ == "__main__":

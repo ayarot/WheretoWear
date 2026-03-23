@@ -5,7 +5,7 @@ from services.weather import fetch_weather
 from logging_config import setup_logging
 from db.database import create_db_and_tables
 from scheduler import start_scheduler
-from db.cities import get_city_id_by_name, get_source_url_by_name
+from db.cities import get_city_id_by_name, get_source_url_by_name, initialize_cities
 from db.save_snapshot import get_latest_snapshot_by_id, get_snapshots_last_week
 from db.models import normalize_clothing_dict
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,6 +26,7 @@ app.add_middleware(
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
+    initialize_cities()
     setup_logging()
     start_scheduler()
 

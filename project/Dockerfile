@@ -17,4 +17,4 @@ EXPOSE 8000
 # Host browser hits localhost:8000 only if you publish the port, e.g.
 #   docker run -p 8000:8000 <image>
 # or: docker compose up
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
