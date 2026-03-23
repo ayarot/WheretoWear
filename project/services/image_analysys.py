@@ -11,7 +11,7 @@ from db.models import ClothingPresence, PresenceLevel, parse_clothing_presence
 
 # Load .env file
 load_dotenv()
-#OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 _openai_client: OpenAI | None = None
 
