@@ -484,7 +484,7 @@ async function fetchSnapshot() {
     errorDiv.innerText = "";
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/snapshot/" + city);
+        const response = await fetch("/snapshot/" + city);
 
         if (!response.ok) {
             errorDiv.innerText = "City not found";
@@ -526,7 +526,7 @@ async function toggleHistory() {
     dropdown.innerHTML = '<div class="history-item" style="color:rgba(255,255,255,0.4)">Loading...</div>';
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/snapshot/" + currentCity + "/history");
+        const response = await fetch("/snapshot/" + currentCity + "/history");
         if (!response.ok) {
             dropdown.innerHTML = '<div class="history-item">No history available</div>';
             return;
@@ -554,7 +554,7 @@ async function loadHistoryItem(snapshotId) {
     try {
         let items = lastHistoryItems;
         if (!items.length) {
-            const response = await fetch("http://127.0.0.1:8000/snapshot/" + currentCity + "/history");
+            const response = await fetch("/snapshot/" + currentCity + "/history");
             if (!response.ok) return;
             items = await response.json();
             lastHistoryItems = items;
