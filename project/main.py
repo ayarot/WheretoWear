@@ -29,8 +29,6 @@ def on_startup():
     setup_logging()
     start_scheduler()
 
-
-
 @app.get("/snapshot/{city}/history")
 async def get_snapshot_history(city: str):
     city_id = get_city_id_by_name(city)
@@ -74,6 +72,9 @@ async def get_snapshot(city: str):
         "source_url": source_url
     }
 
-
+@app.get("/ping")
+def keep_alive():
+    return {"status": "I am awake!"}
+    
 # Mount last so /snapshot/* API routes match before static files.
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
