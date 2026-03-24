@@ -1,11 +1,9 @@
 # WhereToWear
 
-Street-style signals from live city webcams: periodic snapshots from YouTube streams, people detection (YOLO), clothing presence via an LLM, plus current weather. A small **FastAPI** backend exposes JSON for a web UI and stores metadata in **SQLite**.
-
+Street-style signals from live city webcams: periodic snapshots from YouTube streams, people detection (YOLO), clothing presence via an LLM, plus current weather. A **FastAPI** backend exposes JSON for a web UI and stores metadata in **SQLite**.
 ---
 
 ## Features
-
 - **Scheduled jobs** — Captures frames per city, checks crowd density, analyzes outfits, saves results and weather to the database.
 - **REST API** — Latest snapshot and weekly history per city.
 - **Weather** — OpenWeatherMap by city coordinates (requires API key).
@@ -22,12 +20,11 @@ Street-style signals from live city webcams: periodic snapshots from YouTube str
 From the **`backend/`** directory (so imports like `services.*` resolve):
 
 ```bash
-cd backend
+cd project
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
-
 
 Ensure SQLite tables and city rows exist (see `db/database.py`, `db/cities.py`; run their `__main__` blocks or your seed script if the DB is new), then:
 
@@ -96,22 +93,3 @@ Where-to-wear/
 
 ---
 
-## Git and deployment
-
-- Push **code only** — no `.env`, no `*.pem`, no local databases or snapshot images if you keep them ignored.
-- For **GitHub Actions** deploys over SSH, store the private key in a repository secret (e.g. `PEM_FILE`); workflows must live under **`.github/workflows/`** at the **repo root** to run.
-- On the server, create **`.env`** manually (or another secrets mechanism); it is not cloned from GitHub.
-
----
-
-## Troubleshooting
-
-- **Weather empty in the UI** — Check `OPEN_WEATHER_API_KEY` inside the running environment (Compose or shell).
-- **`pip install` errors** — `sqlite3` and `logging` are part of the Python standard library; they should not be listed as pip packages. If your `requirements.txt` still lists them, remove those lines.
-- **YOLO weights** — First run may download `yolov8n.pt` if not bundled; large files are often gitignored (`*.pt`).
-
----
-
-## License
-
-Add a `LICENSE` file if you open-source the project.
